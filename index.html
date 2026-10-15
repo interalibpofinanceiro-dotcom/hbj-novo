@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HBJ Novo</title>
+<meta name="description" content="Hinário Brados de Júbilo (HBJ) — Igreja Adventista da Promessa, Vila Camargo">
+<meta name="theme-color" content="#004B83" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0E1620" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icons/favicon.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="HBJ Novo">
+<meta property="og:title" content="Brado — HBJ Novo">
+<meta property="og:description" content="Hinário Brados de Júbilo no seu celular. Abra o link e instale.">
+<meta property="og:image" content="icons/icon-512.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400;1,7..72,500&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F6F4EF; --surface:#FFFFFF; --surface-2:#EFECE5;
+  --ink:#16202B; --muted:#5B6673; --line:#E2DDD3;
+  --primary:#004B83; --primary-ink:#FFFFFF; --accent:#E18800; --accent-soft:#FBEBD3;
+  --star:#E18800; --shadow:0 1px 2px rgba(10,30,50,.06),0 4px 14px rgba(10,30,50,.06);
+  --lyric:1.22rem;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0E1620; --surface:#16212E; --surface-2:#1D2A39;
+  --ink:#ECEFF3; --muted:#9BA7B5; --line:#273444;
+  --primary:#6FB3EA; --primary-ink:#0E1620; --accent:#F2A33A; --accent-soft:#3A2A12;
+  --star:#F2A33A; --shadow:0 1px 2px rgba(0,0,0,.3);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0E1620; --surface:#16212E; --surface-2:#1D2A39;
+  --ink:#ECEFF3; --muted:#9BA7B5; --line:#273444;
+  --primary:#6FB3EA; --primary-ink:#0E1620; --accent:#F2A33A; --accent-soft:#3A2A12;
+  --star:#F2A33A; --shadow:0 1px 2px rgba(0,0,0,.3);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font-family:'Montserrat',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;min-height:100vh}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+[hidden]{display:none!important}
+.wrap{max-width:720px;margin:0 auto;padding:0 16px}
+
+/* ---------- topo ---------- */
+.top{position:sticky;top:0;z-index:20;background:var(--primary);color:#fff;
+  padding:calc(env(safe-area-inset-top) + 10px) 0 12px}
+:root[data-theme="dark"] .top{background:var(--surface)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .top{background:var(--surface)}}
+.top .wrap{display:flex;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.brand img{width:38px;height:38px;border-radius:50%;background:#fff;flex:none}
+.brand b{display:block;font-size:1.05rem;font-weight:700;letter-spacing:.01em;color:#fff}
+.brand small{display:block;font-size:.72rem;font-weight:500;opacity:.8;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ibtn{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;flex:none}
+.ibtn svg{width:22px;height:22px}
+.top .ibtn{color:#fff}
+.top .ibtn:active{background:rgba(255,255,255,.15)}
+
+.search{position:relative;margin-top:12px}
+.search input{width:100%;height:50px;border-radius:14px;border:0;padding:0 100px 0 44px;
+  font:500 1.02rem 'Montserrat',sans-serif;background:var(--surface);color:var(--ink);outline:none;box-shadow:var(--shadow)}
+.search input::placeholder{color:var(--muted);font-weight:500}
+.search .lupa{position:absolute;left:14px;top:14px;width:22px;height:22px;color:var(--muted)}
+.search .kb{position:absolute;right:6px;top:6px;height:38px;padding:0 12px;border-radius:10px;
+  background:var(--surface-2);color:var(--ink);font-weight:700;font-size:.85rem}
+.search .clear{position:absolute;right:62px;top:6px;width:38px;height:38px;border-radius:10px;color:var(--muted);display:grid;place-items:center}
+
+.tabs{display:flex;gap:8px;margin:14px 0 6px}
+.tab{flex:1;height:40px;border-radius:12px;font-weight:600;font-size:.9rem;color:var(--muted);background:var(--surface-2)}
+.tab[aria-selected="true"]{background:var(--primary);color:var(--primary-ink)}
+
+/* ---------- instalação ---------- */
+.install{flex-wrap:wrap;margin:14px 0 4px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;
+  display:flex;gap:12px;align-items:center;box-shadow:var(--shadow)}
+.install .txt{flex:1 1 200px;font-size:.88rem;line-height:1.45}
+.install .txt b{display:block;font-size:.95rem;margin-bottom:2px}
+.btn{height:44px;padding:0 16px;border-radius:12px;font-weight:700;font-size:.9rem;background:var(--accent);color:#1b1206;flex:none}
+.btn.ghost{background:var(--surface-2);color:var(--ink)}
+.install .btn{width:100%}
+.install .x{align-self:flex-start;color:var(--muted);width:28px;height:28px;display:grid;place-items:center;flex:none}
+.ios-share{display:inline-block;vertical-align:-4px;width:18px;height:18px;color:var(--primary)}
+
+/* ---------- lista ---------- */
+.count{font-size:.78rem;color:var(--muted);margin:10px 2px 6px;font-weight:500}
+.list{list-style:none;margin:0 0 40px;padding:0}
+.row{display:flex;align-items:center;gap:12px;padding:12px 4px;border-bottom:1px solid var(--line);cursor:pointer}
+.row:active{background:var(--surface-2)}
+.num{width:46px;height:40px;border-radius:10px;background:var(--surface);border:1px solid var(--line);
+  display:grid;place-items:center;font-weight:700;font-size:.95rem;color:var(--primary);flex:none}
+.row .t{flex:1;min-width:0}
+.row .t b{display:block;font-weight:600;font-size:.98rem;line-height:1.3}
+.row .t span{display:block;font-family:'Literata',Georgia,serif;font-size:.86rem;color:var(--muted);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.row .t mark{background:var(--accent-soft);color:inherit;border-radius:3px;padding:0 1px}
+.row .fav{color:var(--star);width:18px;height:18px;flex:none}
+.empty{text-align:center;color:var(--muted);padding:48px 16px;line-height:1.5}
+.empty b{display:block;color:var(--ink);font-size:1.05rem;margin-bottom:4px}
+
+/* ---------- leitor ---------- */
+.reader{position:fixed;inset:0;z-index:40;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.rbar{position:sticky;top:0;z-index:2;background:var(--bg);border-bottom:1px solid var(--line);
+  padding:calc(env(safe-area-inset-top) + 6px) 0 6px}
+.rbar .wrap{display:flex;align-items:center;gap:2px}
+.rbar .sp{flex:1}
+.rbar .ibtn{color:var(--ink)}
+.rbar .ibtn:active{background:var(--surface-2)}
+.rbar .zoom{font-weight:700;font-size:.95rem;width:44px}
+.rbar .on{color:var(--star)}
+.hymn{padding:22px 16px 30px}
+.hymn .n{font-weight:700;color:var(--accent);font-size:.85rem;letter-spacing:.12em;text-transform:uppercase}
+.hymn h1{font-family:'Literata',Georgia,serif;font-weight:600;font-size:calc(var(--lyric) * 1.35);line-height:1.2;margin:6px 0 12px}
+.meta{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;margin-bottom:6px}
+.cred{flex:1;min-width:200px;font-size:.78rem;line-height:1.5;color:var(--muted);white-space:pre-line}
+.tom{font-weight:700;font-size:.8rem;padding:5px 10px;border-radius:999px;background:var(--surface-2);color:var(--ink);flex:none}
+.lyrics{font-family:'Literata',Georgia,serif;font-size:var(--lyric);line-height:1.6;margin-top:22px}
+.st{margin:0 0 1.15em;white-space:pre-line}
+.st.coro{font-style:italic;border-left:3px solid var(--accent);padding-left:14px;margin-left:4px;color:var(--ink)}
+.nota{font-size:.8rem;font-style:italic;color:var(--muted);margin-top:8px}
+.semletra{font-family:'Literata',serif;color:var(--muted);font-style:italic;font-size:1rem}
+.pn{display:flex;gap:10px;margin:26px 0 calc(env(safe-area-inset-bottom) + 24px)}
+.pn button{flex:1;min-height:52px;border-radius:14px;background:var(--surface);border:1px solid var(--line);
+  font-weight:600;font-size:.85rem;padding:8px 12px;display:flex;align-items:center;gap:8px;text-align:left}
+.pn button.nx{justify-content:flex-end;text-align:right}
+.pn button small{display:block;color:var(--muted);font-weight:500;font-size:.72rem}
+.pn button:disabled{visibility:hidden}
+
+/* ---------- modal ---------- */
+.modal{position:fixed;inset:0;z-index:60;background:rgba(5,15,25,.55);display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--surface);width:100%;max-width:560px;max-height:92vh;overflow-y:auto;border-radius:22px 22px 0 0;
+  padding:22px 20px calc(env(safe-area-inset-bottom) + 22px)}
+@media (min-width:640px){.modal{align-items:center}.sheet{border-radius:22px}}
+.sheet .logo{display:block;width:100%;max-width:300px;margin:4px auto 16px;border-radius:12px}
+.sheet h2{font-family:'Literata',serif;font-weight:600;font-size:1.3rem;margin:0 0 6px;text-align:center}
+.sheet p{font-size:.9rem;line-height:1.6;color:var(--ink);margin:0 0 12px}
+.sheet .sub{text-align:center;color:var(--muted);font-size:.85rem;margin-bottom:18px}
+.demap{background:var(--accent-soft);border-radius:16px;padding:16px;margin:16px 0}
+.demap .lb{font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.demap h3{margin:4px 0 8px;font-size:1.05rem}
+.demap p{margin:0}
+.sheet .fine{font-size:.78rem;color:var(--muted)}
+.sheet .close{width:100%;margin-top:10px}
+.howto{background:var(--surface-2);border-radius:14px;padding:14px;margin:12px 0}
+.howto b{display:block;margin-bottom:4px;font-size:.9rem}
+.howto p{font-size:.85rem;margin:0}
+
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 24px);transform:translateX(-50%);
+  background:var(--ink);color:var(--bg);padding:11px 18px;border-radius:12px;font-weight:600;font-size:.88rem;z-index:80;
+  box-shadow:0 6px 24px rgba(0,0,0,.25);max-width:calc(100% - 32px);text-align:center}
+.loading{padding:60px 0;text-align:center;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<header class="top" id="top">
+  <div class="wrap">
+    <div class="brand">
+      <img src="icons/logo-circulo.png" alt="">
+      <div style="min-width:0"><b>HBJ Novo</b><small>Hinário Brados de Júbilo · Promessa Vila Camargo</small></div>
+    </div>
+    <button class="ibtn" id="themeBtn" aria-label="Alternar modo claro/escuro"></button>
+    <button class="ibtn" id="aboutBtn" aria-label="Sobre o aplicativo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 11v5.5M12 7.6v.1"/></svg>
+    </button>
+  </div>
+  <div class="wrap">
+    <div class="search">
+      <svg class="lupa" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" inputmode="text" autocomplete="off" autocorrect="off" spellcheck="false"
+             placeholder="Nº, título ou letra" aria-label="Buscar hino por número, título ou trecho da letra">
+      <button class="clear" id="clearBtn" aria-label="Limpar busca" hidden>
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+      <button class="kb" id="kbBtn" aria-label="Trocar teclado numérico/letras">123</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="installBox"></div>
+  <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tabAll" aria-selected="true">Todos</button>
+    <button class="tab" role="tab" id="tabFav" aria-selected="false">Favoritos</button>
+  </div>
+  <div class="count" id="count"></div>
+  <ul class="list" id="list"><li class="loading">Carregando hinos…</li></ul>
+</main>
+
+<section class="reader" id="reader" hidden aria-modal="true" role="dialog">
+  <div class="rbar">
+    <div class="wrap">
+      <button class="ibtn" id="backBtn" aria-label="Voltar para a lista">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+      </button>
+      <span class="sp"></span>
+      <button class="ibtn zoom" id="zoomOut" aria-label="Diminuir letra">A−</button>
+      <button class="ibtn zoom" id="zoomIn" aria-label="Aumentar letra">A+</button>
+      <button class="ibtn" id="favBtn" aria-label="Favoritar"></button>
+      <button class="ibtn" id="copyBtn" aria-label="Copiar letra">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6.5A2.5 2.5 0 0 0 13.5 4h-7A2.5 2.5 0 0 0 4 6.5v7A2.5 2.5 0 0 0 6.5 16H8"/></svg>
+      </button>
+      <button class="ibtn" id="shareBtn" aria-label="Compartilhar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5"/><path d="M5 12v6.5A2.5 2.5 0 0 0 7.5 21h9a2.5 2.5 0 0 0 2.5-2.5V12"/></svg>
+      </button>
+    </div>
+  </div>
+  <article class="wrap hymn" id="hymn"></article>
+</section>
+
+<div class="modal" id="about" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+    <img class="logo" id="aboutLogo" src="icons/logo-promessa.png" alt="Igreja Adventista da Promessa — Vila Camargo">
+    <h2 id="aboutTitle">Brado — HBJ Novo</h2>
+    <div class="sub">Hinário Brados de Júbilo<br>Igreja Adventista da Promessa — Vila Camargo</div>
+
+    <div class="demap">
+      <div class="lb">Menção honrosa</div>
+      <h3>DEMAP — Departamento de Música e Artes da Promessa</h3>
+      <p>A curadoria, a seleção e os arranjos dos hinos do Hinário Brados de Júbilo foram realizados pelo DEMAP.
+         Nossa gratidão a todos que se dedicaram a este trabalho para a glória de Deus.</p>
+    </div>
+
+    <p>Este aplicativo reúne os <b id="aboutCount">541</b> hinos do HBJ para uso nos cultos e na devoção pessoal da
+       Igreja Adventista da Promessa — Vila Camargo. Os textos são reproduzidos conforme o arquivo original do hinário.</p>
+
+    <div class="howto">
+      <b>Instalar no Android</b>
+      <p>Abra o link no Chrome e toque em “Instalar aplicativo no celular”. Se o botão não aparecer, use o menu ⋮ → “Instalar app” ou “Adicionar à tela inicial”.</p>
+    </div>
+    <div class="howto">
+      <b>Instalar no iPhone</b>
+      <p>Abra o link no Safari, toque no botão Compartilhar (ícone com quadrado e seta) e selecione “Adicionar à Tela de Início”.</p>
+    </div>
+    <p class="fine">Depois do primeiro acesso, o hinário funciona sem internet.</p>
+    <button class="btn ghost close" id="aboutClose">Fechar</button>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function(){
+  "use strict";
+  var $ = function(s){ return document.querySelector(s); };
+  var HYMNS = [], BYNUM = {}, current = null;
+
+  /* ---------- armazenamento local (sempre protegido) ---------- */
+  function get(k, d){ try{ var v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); }catch(e){ return d; } }
+  function set(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+
+  var favs = get("hbj.favs", []);
+  var fontScale = get("hbj.fs", 1.22);
+  var tab = "all";
+
+  /* ---------- tema ---------- */
+  var ICON_SUN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M4.6 4.6 6 6M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4"/></svg>';
+  var ICON_MOON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5Z"/></svg>';
+  function isDark(){
+    var t = document.documentElement.getAttribute("data-theme");
+    if(t) return t === "dark";
+    return window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches;
+  }
+  function applyTheme(t){
+    if(t) document.documentElement.setAttribute("data-theme", t);
+    else document.documentElement.removeAttribute("data-theme");
+    $("#themeBtn").innerHTML = isDark() ? ICON_SUN : ICON_MOON;
+    $("#aboutLogo").src = isDark() ? "icons/logo-promessa-escuro.png" : "icons/logo-promessa.png";
+  }
+  applyTheme(get("hbj.theme", null));
+  $("#themeBtn").onclick = function(){ var t = isDark() ? "light" : "dark"; set("hbj.theme", t); applyTheme(t); };
+
+  /* ---------- utilidades ---------- */
+  function esc(s){ return String(s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function norm(s){ return String(s).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim(); }
+  var toastT;
+  function toast(msg){ var t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(function(){ t.hidden = true; }, 2200); }
+  function isFav(n){ return favs.indexOf(n) > -1; }
+  var STAR = function(on){ return '<svg viewBox="0 0 24 24" fill="' + (on ? "currentColor" : "none") + '" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg>'; };
+
+  /* ---------- busca ---------- */
+  function search(q){
+    var pool = tab === "fav" ? HYMNS.filter(function(h){ return isFav(h.numero); }) : HYMNS;
+    var nq = norm(q);
+    if(!nq) return pool.map(function(h){ return {h:h}; });
+    var out = [];
+    if(/^\d+$/.test(nq)){
+      pool.forEach(function(h){
+        var s = String(h.numero);
+        if(s === nq) out.push({h:h, r:0});
+        else if(s.indexOf(nq) === 0) out.push({h:h, r:1});
+      });
+      return out.sort(function(a,b){ return a.r - b.r || a.h.numero - b.h.numero; });
+    }
+    var words = nq.split(" ");
+    pool.forEach(function(h){
+      var hasAll = function(txt){ return words.every(function(w){ return txt.indexOf(w) > -1; }); };
+      if(h._nt.indexOf(nq) > -1) out.push({h:h, r:0});
+      else if(hasAll(h._nt)) out.push({h:h, r:1});
+      else if(h._nl.indexOf(nq) > -1) out.push({h:h, r:2, snip:snippet(h, words)});
+      else if(hasAll(h._nl)) out.push({h:h, r:3, snip:snippet(h, words)});
+    });
+    return out.sort(function(a,b){ return a.r - b.r || a.h.numero - b.h.numero; });
+  }
+  function snippet(h, words){
+    var lines = h.estrofes.join("\n").split("\n");
+    for(var i = 0; i < lines.length; i++){
+      var nl = norm(lines[i]);
+      if(words.every(function(w){ return nl.indexOf(w) > -1; })) return lines[i];
+    }
+    for(i = 0; i < lines.length; i++){ if(norm(lines[i]).indexOf(words[0]) > -1) return lines[i]; }
+    return null;
+  }
+  function highlight(text, words){
+    // marca as palavras buscadas sem alterar o texto original
+    var src = text, n = src.normalize("NFD"), map = [], plain = "";
+    for(var i = 0, j = 0; i < n.length; i++){
+      if(/[̀-ͯ]/.test(n[i])) continue;
+      plain += n[i].toLowerCase(); map.push(j);
+      j++;
+    }
+    if(plain.length !== src.length) return esc(src);
+    var marks = [];
+    words.forEach(function(w){ if(!w) return; var k = plain.indexOf(w); if(k > -1) marks.push([k, k + w.length]); });
+    marks.sort(function(a,b){ return a[0]-b[0]; });
+    var out = "", pos = 0;
+    marks.forEach(function(m){ if(m[0] < pos) return; out += esc(src.slice(pos, m[0])) + "<mark>" + esc(src.slice(m[0], m[1])) + "</mark>"; pos = m[1]; });
+    return out + esc(src.slice(pos));
+  }
+
+  /* ---------- lista ---------- */
+  function renderList(){
+    var q = $("#q").value;
+    $("#clearBtn").hidden = !q;
+    var res = search(q), words = norm(q).split(" ").filter(Boolean);
+    var list = $("#list");
+    $("#count").textContent = tab === "fav"
+      ? (favs.length ? res.length + " favorito" + (res.length === 1 ? "" : "s") : "")
+      : (q ? res.length + " resultado" + (res.length === 1 ? "" : "s") : HYMNS.length + " hinos");
+    if(!res.length){
+      list.innerHTML = tab === "fav" && !favs.length
+        ? '<li class="empty"><b>Nenhum favorito ainda</b>Abra um hino e toque na estrela para guardá-lo aqui.</li>'
+        : '<li class="empty"><b>Nenhum hino encontrado</b>Tente o número, outra palavra do título ou um trecho da letra.</li>';
+      return;
+    }
+    var html = "";
+    for(var i = 0; i < res.length; i++){
+      var h = res[i].h, sub = res[i].snip || h._first;
+      html += '<li class="row" data-n="' + h.numero + '"><span class="num">' + h.numero + '</span><span class="t"><b>'
+        + (words.length && !/^\d+$/.test(words.join("")) ? highlight(h.titulo, words) : esc(h.titulo)) + '</b>'
+        + (sub ? '<span>' + (res[i].snip ? highlight(sub, words) : esc(sub)) + '</span>' : '')
+        + '</span>' + (isFav(h.numero) ? '<span class="fav">' + STAR(true) + '</span>' : '') + '</li>';
+    }
+    list.innerHTML = html;
+  }
+  $("#list").addEventListener("click", function(e){
+    var row = e.target.closest(".row"); if(row) openHymn(+row.dataset.n);
+  });
+  var qT;
+  $("#q").addEventListener("input", function(){ clearTimeout(qT); qT = setTimeout(renderList, 90); });
+  $("#q").addEventListener("keydown", function(e){
+    if(e.key === "Enter"){
+      var v = norm(this.value);
+      if(/^\d+$/.test(v) && BYNUM[+v]){ this.blur(); openHymn(+v); }
+      else this.blur();
+    }
+  });
+  $("#clearBtn").onclick = function(){ $("#q").value = ""; renderList(); $("#q").focus(); };
+  $("#kbBtn").onclick = function(){
+    var q = $("#q"), num = q.getAttribute("inputmode") !== "numeric";
+    q.setAttribute("inputmode", num ? "numeric" : "text");
+    this.textContent = num ? "ABC" : "123";
+    q.blur(); setTimeout(function(){ q.focus(); }, 30);
+  };
+  function setTab(t){
+    tab = t;
+    $("#tabAll").setAttribute("aria-selected", t === "all");
+    $("#tabFav").setAttribute("aria-selected", t === "fav");
+    renderList();
+  }
+  $("#tabAll").onclick = function(){ setTab("all"); };
+  $("#tabFav").onclick = function(){ setTab("fav"); };
+
+  /* ---------- leitor ---------- */
+  function applyFont(){ document.documentElement.style.setProperty("--lyric", fontScale + "rem"); }
+  applyFont();
+  $("#zoomIn").onclick = function(){ fontScale = Math.min(2.6, +(fontScale + 0.12).toFixed(2)); set("hbj.fs", fontScale); applyFont(); };
+  $("#zoomOut").onclick = function(){ fontScale = Math.max(0.9, +(fontScale - 0.12).toFixed(2)); set("hbj.fs", fontScale); applyFont(); };
+
+  function renderHymn(h){
+    var coros = h.coros || [];
+    var body = h.estrofes.length
+      ? h.estrofes.map(function(e, i){ return '<p class="st' + (coros.indexOf(i) > -1 ? " coro" : "") + '">' + esc(e) + '</p>'; }).join("")
+      : '<p class="semletra">A letra deste hino não consta no arquivo original do HBJ.</p>';
+    var prev = BYNUM[h.numero - 1], next = BYNUM[h.numero + 1];
+    $("#hymn").innerHTML =
+        '<div class="n">Hino ' + h.numero + '</div>'
+      + '<h1>' + esc(h.titulo) + '</h1>'
+      + '<div class="meta">' + (h.creditos ? '<div class="cred">' + esc(h.creditos) + '</div>' : '')
+      + (h.tom ? '<span class="tom">Tom: ' + esc(h.tom) + '</span>' : '') + '</div>'
+      + '<div class="lyrics">' + body + (h.nota ? '<p class="nota">' + esc(h.nota) + '</p>' : '') + '</div>'
+      + '<div class="pn">'
+      + '<button id="prevBtn"' + (prev ? '' : ' disabled') + '><span>‹</span><span>' + (prev ? '<small>Hino ' + prev.numero + '</small>' + esc(prev.titulo) : '') + '</span></button>'
+      + '<button class="nx" id="nextBtn"' + (next ? '' : ' disabled') + '><span>' + (next ? '<small>Hino ' + next.numero + '</small>' + esc(next.titulo) : '') + '</span><span>›</span></button>'
+      + '</div>';
+    $("#prevBtn").onclick = function(){ if(prev) go(prev.numero, true); };
+    $("#nextBtn").onclick = function(){ if(next) go(next.numero, true); };
+    $("#favBtn").innerHTML = STAR(isFav(h.numero));
+    $("#favBtn").classList.toggle("on", isFav(h.numero));
+    $("#favBtn").setAttribute("aria-label", isFav(h.numero) ? "Remover dos favoritos" : "Favoritar");
+  }
+  function go(n, replace){
+    var url = "#/hino/" + n;
+    if(replace) history.replaceState({hbj:n}, "", url); else history.pushState({hbj:n}, "", url);
+    route();
+  }
+  var pushed = false;   // o leitor foi aberto a partir da lista (há uma entrada de histórico pra voltar)
+  function openHymn(n){ pushed = true; go(n, false); }
+  function showReader(h){
+    current = h;
+    document.title = h.numero + ". " + h.titulo + " — HBJ Novo";
+    renderHymn(h);
+    var r = $("#reader"); var wasHidden = r.hidden; r.hidden = false; r.scrollTop = 0;
+    if(wasHidden) document.body.style.overflow = "hidden";
+    requestWake();
+  }
+  function closeReader(){
+    current = null; pushed = false; document.title = "HBJ Novo";
+    $("#reader").hidden = true; document.body.style.overflow = "";
+    releaseWake(); renderList();
+  }
+  $("#backBtn").onclick = function(){
+    if(pushed) history.back();
+    else { history.replaceState(null, "", location.pathname + location.search); closeReader(); }
+  };
+  function route(){
+    var m = location.hash.match(/^#\/hino\/(\d+)/);
+    if(m && BYNUM[+m[1]]) showReader(BYNUM[+m[1]]);
+    else if(!$("#reader").hidden) closeReader();
+  }
+  window.addEventListener("popstate", route);
+  window.addEventListener("hashchange", route);
+
+  $("#favBtn").onclick = function(){
+    if(!current) return;
+    var n = current.numero, i = favs.indexOf(n);
+    if(i > -1){ favs.splice(i, 1); toast("Removido dos favoritos"); } else { favs.push(n); toast("Adicionado aos favoritos"); }
+    favs.sort(function(a,b){ return a-b; }); set("hbj.favs", favs); renderHymn(current);
+  };
+  function hymnText(h){
+    return h.numero + ". " + h.titulo + "\n\n" + h.estrofes.join("\n\n");
+  }
+  function copyText(t){
+    if(navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(t);
+    return new Promise(function(ok, fail){
+      var ta = document.createElement("textarea"); ta.value = t; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      try{ document.execCommand("copy") ? ok() : fail(); }catch(e){ fail(e); } document.body.removeChild(ta);
+    });
+  }
+  $("#copyBtn").onclick = function(){
+    if(!current) return;
+    copyText(hymnText(current)).then(function(){ toast("Letra copiada"); }, function(){ toast("Não foi possível copiar"); });
+  };
+  $("#shareBtn").onclick = function(){
+    if(!current) return;
+    var url = location.origin + location.pathname + "#/hino/" + current.numero;
+    var text = hymnText(current) + "\n\n— HBJ Novo · Promessa Vila Camargo";
+    if(navigator.share){
+      navigator.share({title: current.numero + ". " + current.titulo, text: text, url: url}).catch(function(){});
+    } else {
+      copyText(text + "\n" + url).then(function(){ toast("Letra e link copiados"); }, function(){ toast("Não foi possível compartilhar"); });
+    }
+  };
+
+  /* deslizar para o lado troca de hino */
+  (function(){
+    var x0 = null, y0 = 0, t0 = 0, r = $("#reader");
+    r.addEventListener("touchstart", function(e){ if(e.touches.length !== 1) return; x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; t0 = Date.now(); }, {passive:true});
+    r.addEventListener("touchend", function(e){
+      if(x0 === null || !current) return;
+      var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null;
+      if(Date.now() - t0 > 600 || Math.abs(dx) < 80 || Math.abs(dy) > Math.abs(dx) * 0.6) return;
+      var t = BYNUM[current.numero + (dx < 0 ? 1 : -1)]; if(t) go(t.numero, true);
+    }, {passive:true});
+  })();
+
+  /* ---------- tela sempre acesa ---------- */
+  var wakeLock = null;
+  function requestWake(){
+    try{
+      if(!wakeLock && navigator.wakeLock && navigator.wakeLock.request)
+        navigator.wakeLock.request("screen").then(function(w){ wakeLock = w; w.addEventListener("release", function(){ wakeLock = null; }); }, function(){});
+    }catch(e){}
+  }
+  function releaseWake(){ try{ if(wakeLock){ wakeLock.release(); wakeLock = null; } }catch(e){} }
+  document.addEventListener("visibilitychange", function(){ if(document.visibilityState === "visible" && current) requestWake(); });
+
+  /* ---------- sobre ---------- */
+  $("#aboutBtn").onclick = function(){ $("#about").hidden = false; };
+  $("#aboutClose").onclick = function(){ $("#about").hidden = true; };
+  $("#about").addEventListener("click", function(e){ if(e.target === this) this.hidden = true; });
+  document.addEventListener("keydown", function(e){
+    if(e.key !== "Escape") return;
+    if(!$("#about").hidden) $("#about").hidden = true; else if(current) $("#backBtn").click();
+  });
+
+  /* ---------- instalação ---------- */
+  var ua = navigator.userAgent || "";
+  var isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  var standalone = (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone === true;
+  var deferredPrompt = null;
+  var SHARE_ICON = '<svg class="ios-share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5"/><path d="M5 12v6.5A2.5 2.5 0 0 0 7.5 21h9a2.5 2.5 0 0 0 2.5-2.5V12"/></svg>';
+  function renderInstall(){
+    var box = $("#installBox");
+    if(standalone){ box.innerHTML = ""; return; }
+    if(deferredPrompt){
+      box.innerHTML = '<div class="install"><div class="txt"><b>Leve o hinário no celular</b>Funciona sem internet, direto da tela inicial.</div>'
+        + '<button class="btn" id="installBtn">Instalar Aplicativo no Celular</button></div>';
+      $("#installBtn").onclick = function(){
+        var p = deferredPrompt; if(!p) return;
+        p.prompt();
+        p.userChoice.finally(function(){ deferredPrompt = null; renderInstall(); });
+      };
+    } else if(isIOS && !get("hbj.iosHintOff", false)){
+      box.innerHTML = '<div class="install"><div class="txt"><b>Instalar no iPhone</b>Para instalar no iPhone: toque no botão Compartilhar '
+        + SHARE_ICON + ' (ícone com quadrado e seta) e selecione “Adicionar à Tela de Início”.</div>'
+        + '<button class="x" id="iosX" aria-label="Fechar aviso"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>';
+      $("#iosX").onclick = function(){ set("hbj.iosHintOff", true); renderInstall(); };
+    } else box.innerHTML = "";
+  }
+  window.addEventListener("beforeinstallprompt", function(e){ e.preventDefault(); deferredPrompt = e; renderInstall(); });
+  window.addEventListener("appinstalled", function(){ deferredPrompt = null; standalone = true; renderInstall(); toast("Aplicativo instalado"); });
+  renderInstall();
+
+  /* ---------- service worker (offline) ---------- */
+  if("serviceWorker" in navigator){
+    var hadController = !!navigator.serviceWorker.controller, reloading = false;
+    navigator.serviceWorker.addEventListener("controllerchange", function(){
+      if(!hadController || reloading) return;   // 1ª instalação: não recarrega
+      reloading = true; location.reload();
+    });
+    window.addEventListener("load", function(){
+      navigator.serviceWorker.register("sw.js").then(function(reg){
+        setInterval(function(){ reg.update(); }, 60 * 60 * 1000);
+      }).catch(function(){});
+    });
+  }
+
+  /* ---------- carga dos hinos ---------- */
+  fetch("hinos.json").then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); }).then(function(data){
+    HYMNS = data;
+    HYMNS.forEach(function(h){
+      BYNUM[h.numero] = h;
+      h._nt = norm(h.titulo);
+      h._nl = norm(h.estrofes.join(" "));
+      h._first = h.estrofes.length ? h.estrofes[0].split("\n")[0] : "";
+    });
+    $("#aboutCount").textContent = HYMNS.length;
+    renderList();
+    route();
+  }).catch(function(){
+    $("#list").innerHTML = '<li class="empty"><b>Não foi possível carregar os hinos</b>Conecte-se à internet e abra o aplicativo novamente.</li>';
+  });
+})();
+</script>
+</body>
+</html>

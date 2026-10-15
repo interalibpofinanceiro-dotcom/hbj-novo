@@ -1,0 +1,4 @@
+tools/data/
+*.prev.json
+__pycache__/
+desktop.ini
