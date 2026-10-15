@@ -2,8 +2,9 @@
 
 App instalável (Android e iPhone) com os 541 hinos do HBJ, para a Igreja Adventista da Promessa — Vila Camargo.
 
-- **Link público:** https://interalibpofinanceiro-dotcom.github.io/hbj-novo/
-- **Repositório:** https://github.com/interalibpofinanceiro-dotcom/hbj-novo (GitHub Pages, branch `main`, raiz)
+- **Link público:** https://brado-de-jubilo.netlify.app/
+- **Hospedagem:** Netlify, projeto `brado-de-jubilo` (time da conta digitalmktsilvana), publica sozinho a cada `git push` na branch `main`
+- **Repositório:** https://github.com/interalibpofinanceiro-dotcom/hbj-novo
 - **Funciona offline** depois do 1º acesso (service worker em `sw.js`).
 
 ## Arquivos
@@ -37,7 +38,7 @@ git commit -m "Corrige hino N"
 git push
 ```
 
-Em ~1 min o GitHub Pages atualiza; os celulares pegam a versão nova na próxima abertura com internet.
+Em ~1 min o Netlify atualiza; os celulares pegam a versão nova na próxima abertura com internet.
 
 ## Regenerar tudo a partir do PDF
 
